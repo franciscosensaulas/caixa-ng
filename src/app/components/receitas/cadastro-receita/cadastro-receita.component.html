@@ -10,13 +10,26 @@
 
 <button (click)="salvarReceita()">Salvar</button>
 
-@if(nome != ""){
-    <p>Texto digitado: {{nome}}</p>
-    
-    <ul>
-        <li>1 vez: {{ valor * 1}}</li>
-        <li>2 vezes: {{ valor * 2}}</li>
-        <li>3 vezes: {{ valor * 3}}</li>
-        <li>4 vezes: {{ valor * 4}}</li>
-    </ul>
-}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(receita of receitas; track receita){
+            <tr>
+                <td>{{receita.id}}</td>
+                <td>{{receita.nome}}</td>
+                <td>{{receita.valor}}</td>
+                <td>
+                    <button (click)="editar(receita)">Editar</button>
+                    <button (click)="apagar(receita)">Apagar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
