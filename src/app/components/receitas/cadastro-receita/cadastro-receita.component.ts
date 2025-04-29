@@ -21,9 +21,31 @@ export class CadastroReceitaComponent {
   receitas: Array<Receita> = [];
 
   salvarReceita() {
-    if (this.idParaEditar == undefined){
+    if (this.nome.length < 3) {
+      alert("Nome deve conter no mínimo 3 caracteres")
+      return;
+    }
+    if (this.nome.length > 30) {
+      alert("Nome deve conter no máximo 30 caracteres")
+      return;
+    }
+
+    // "5490,29" => "5490.29", por isso é necessário fazer o replace
+    let valor = parseFloat(this.valor.toString().replace(",", "."));
+    // NaN é not a number, é recebido NaN quando o valor que é tentado converter para float 
+    // não é um float válido
+    if (Number.isNaN(valor)) {
+      alert("Valor deve ser um número real");
+      return;
+    }
+    if (valor <= 0) {
+      alert("Valor deve ser maior que R$ 0,00");
+      return;
+    }
+
+    if (this.idParaEditar == undefined) {
       this.cadastrarReceita();
-    }else{
+    } else {
       this.editarReceita();
     }
 
@@ -32,7 +54,7 @@ export class CadastroReceitaComponent {
     // alert(this.nome);
   }
 
-  editarReceita(){
+  editarReceita() {
     let indiceReceita = this.receitas.findIndex(x => x.id == this.idParaEditar);
     this.receitas[indiceReceita].nome = this.nome;
     this.receitas[indiceReceita].valor = this.valor;
@@ -53,6 +75,10 @@ export class CadastroReceitaComponent {
   }
 
   apagar(receita: Receita) {
+    let confirmacao = confirm(`Deseja realmente apagar a receita '${receita.nome}'?`);
+    if (confirmacao == false)
+      return;
+
     // Buscando o indice da receita filtrando por id da receita que foi selecionada
     let indiceReceita = this.receitas.findIndex(x => x.id == receita.id);
     // Removendo a receita da lista receitas utilizando o indice, removendo 1 elemento da lista
